@@ -21,6 +21,22 @@ class EvaluateTests(unittest.TestCase):
             confirmed = evaluate(scan, truth, output, {"V17": 0})
             self.assertEqual(confirmed["confirmed_recall"], 1)
 
+    def test_rejects_duplicate_or_invalid_finding_indexes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            scan = root / "scan.json"
+            truth = root / "truth.json"
+            output = root / "output.json"
+            scan.write_text(json.dumps({"findings": [{"type": "WebView", "evidence": "JavaScript enabled"}]}))
+            truth.write_text(json.dumps([
+                {"id": "V17", "title": "Insecure WebView settings", "aliases": ["WebView"]},
+                {"id": "V18", "title": "Insecure storage", "aliases": ["storage"]},
+            ]))
+            with self.assertRaises(ValueError):
+                evaluate(scan, truth, output, {"V17": 0, "V18": 0})
+            with self.assertRaises(ValueError):
+                evaluate(scan, truth, output, {"V17": -1})
+
 
 if __name__ == "__main__":
     unittest.main()

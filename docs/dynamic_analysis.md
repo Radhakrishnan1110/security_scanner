@@ -3,20 +3,22 @@
 ```mermaid
 flowchart LR
     Q[Job queue] --> S[Scheduler]
-    S --> E[Resettable emulator pool]
-    E --> A[AI navigation agent]
-    A --> I[UI actions / intents / test inputs]
-    I --> O[App + test backend]
-    O --> T[Runtime telemetry: UI, logcat, proxy, hooks]
-    T --> V[Evidence verifier]
-    V --> R[Finding report + replay trace]
-    E --> K[Golden snapshot reset]
+    S --> E[Clean emulator]
+    E --> A[AI test agent]
+    A --> I[UI actions, intents, and test input]
+    I --> O[App and test backend]
+    O --> T[UI, logs, and network evidence]
+    T --> V[Evidence check]
+    V --> R[Finding report and replay steps]
+    E --> K[Reset to clean snapshot]
 ```
 
-I would add dynamic scanning as isolated jobs against a disposable test backend. A scheduler leases an emulator created from a golden snapshot, installs the APK, injects a per-job test account, and gives an AI agent a goal plus a bounded action budget. The agent explores with accessibility/UI hierarchy data, screenshots, deep links, and controlled intent or form inputs. It maintains a screen-and-state graph: nodes are screen fingerprints plus login state, and edges are actions. Coverage is measured as unique states, transitions, exported-component routes, and exercised network endpoints—not merely taps.
+Static analysis reads the APK. Dynamic analysis would run the APK in a safe test environment and watch what happens at runtime.
 
-An agent should only confirm a finding when an oracle observes the security outcome. A crash is an observation, not proof. For example, an intent-redirection finding is confirmed only when a protected target is reached; a WebView issue is confirmed when a controlled origin receives a designated non-secret canary; an authorization issue is confirmed when two test users access different backend objects. The report stores the action trace, emulator snapshot ID, request/response evidence, relevant logs, and a minimal replay script. Dynamic testing can find server-side IDOR/authorization failures that static APK analysis cannot establish because the decisive authorization logic lives behind the backend.
+Each job would start with a clean Android emulator. The app would be installed with a test account and pointed at a disposable test backend. An AI agent would move through the app using the screen structure, screenshots, deep links, and controlled test input. It would keep track of the screens and actions it has already visited so it can explore more of the app instead of repeating the same path.
 
-Scale comes from an image pool, prewarmed emulators, sharded job queues, strict timeouts, and snapshot reset after every run. Jobs should be idempotent and retain only redacted artifacts. Failed runs are retried on a clean image, while deterministic repros are promoted to a smaller regression suite.
+A finding should only be reported when there is proof. For example, an intent issue needs evidence that a protected target was actually reached. A WebView issue needs evidence that a controlled test page received a harmless canary value. An authorization issue needs two test users and proof that one user could read another user's data. The report would save the action steps, relevant logs or network records, and a short replay script.
 
-For SSL pinning, use a test build or authorized runtime instrumentation to add a trusted proxy CA or bypass the pinning check, then route traffic through a per-job proxy. The common failure points are native-library pinning that Java hooks miss, root/debugger detection that changes app behavior, and certificate-transparency or custom trust-manager checks. The harness must record whether interception was actually active; otherwise an empty proxy trace is ambiguous.
+For scale, a scheduler can give jobs to a pool of prebuilt emulators. Every job has a time limit and the emulator is reset after the job finishes. This prevents one test from affecting the next one and makes failures easier to retry.
+
+SSL pinning can stop a proxy from seeing app traffic. In an authorized test environment, I would use a test build or approved runtime instrumentation to trust the test proxy certificate. The harness must record whether interception actually worked. Otherwise, an empty network trace could mean either that the app made no request or that the proxy was blocked.

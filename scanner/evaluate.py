@@ -33,9 +33,16 @@ def evaluate(scan_path: Path, ground_truth_path: Path, output_path: Path, confir
         candidates.append({"ground_truth": truth, "candidates": [item for item in ranked[:3] if item["score"] > 0]})
 
     confirmed = confirmed or {}
-    invalid = {key: value for key, value in confirmed.items() if key not in {item["id"] for item in ground_truth} or not isinstance(value, int) or value >= len(findings)}
+    known_ids = {item["id"] for item in ground_truth}
+    invalid = {
+        key: value
+        for key, value in confirmed.items()
+        if key not in known_ids or type(value) is not int or value < 0 or value >= len(findings)
+    }
     if invalid:
         raise ValueError(f"Invalid confirmed matches: {invalid}")
+    if len(set(confirmed.values())) != len(confirmed):
+        raise ValueError("A finding index may be confirmed against only one ground-truth entry")
     matched_ids = set(confirmed)
     result = {
         "scan": str(scan_path),
