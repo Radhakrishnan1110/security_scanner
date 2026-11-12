@@ -1,6 +1,6 @@
 [app]
 # Change only this path when scanning a different APK.
-apk_path = "../InsecureShop.apk"
+apk_path = "InsecureShop.apk"
 workspace = "runs/insecureshop"
 
 [scan]
