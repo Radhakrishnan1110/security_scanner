@@ -1,0 +1,8 @@
+[
+  "Do not store sensitive authentication data, such as passwords or session tokens, in unencrypted SharedPreferences; use EncryptedSharedPreferences or the Android Keystore system instead.",
+  "Ensure all exported ContentProviders implement strict access controls or signature-level permissions to prevent unauthorized applications from querying private app data.",
+  "Validate the calling identity and authorization level in ContentProvider query methods before returning sensitive information in database cursors.",
+  "Avoid requesting broad shared external storage permissions unless strictly necessary; prefer scoped storage or app-specific private directories for file operations.",
+  "Disable JavaScript in WebViews unless explicitly required, and validate all loaded URLs to prevent cross-site scripting and unauthorized DOM access.",
+  "Never expose credentials or private user details through inter-process communication endpoints without verifying caller identity."
+]

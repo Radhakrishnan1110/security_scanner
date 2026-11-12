@@ -1,0 +1,21 @@
+[
+  {"id": "V01", "title": "Hardcoded credentials", "aliases": ["hardcoded credential", "embedded password", "hard-coded credential"]},
+  {"id": "V02", "title": "Insufficient URL validation", "aliases": ["arbitrary URL", "unvalidated URL", "deep link URL validation"]},
+  {"id": "V03", "title": "Weak host validation", "aliases": ["host validation bypass", "weak host validation"]},
+  {"id": "V04", "title": "Arbitrary code execution through package context", "aliases": ["arbitrary code execution", "package context"]},
+  {"id": "V05", "title": "Access to protected components", "aliases": ["intent redirection", "protected component", "embedded intent"]},
+  {"id": "V06", "title": "Unprotected data URIs", "aliases": ["data URI", "untrusted URI", "loadUrl"]},
+  {"id": "V07", "title": "Arbitrary file theft through chooser", "aliases": ["arbitrary file", "file theft", "chooser"]},
+  {"id": "V08", "title": "Known vulnerable component", "aliases": ["known vulnerable", "vulnerable library", "third-party component"]},
+  {"id": "V09", "title": "Insecure broadcast receiver", "aliases": ["broadcast receiver", "web_url broadcast"]},
+  {"id": "V10", "title": "AWS Cognito misconfiguration", "aliases": ["AWS Cognito", "S3 bucket", "Cognito"]},
+  {"id": "V11", "title": "Insecure FileProvider paths", "aliases": ["FileProvider", "file paths", "root directory sharing"]},
+  {"id": "V12", "title": "Sensitive data sent with implicit intent", "aliases": ["implicit intent", "sensitive data", "credential interception"]},
+  {"id": "V13", "title": "Implicit intent loads arbitrary URL", "aliases": ["implicit intent", "arbitrary URL", "webview"]},
+  {"id": "V14", "title": "Insecure setResult implementation", "aliases": ["setResult", "content provider access"]},
+  {"id": "V15", "title": "Insecure content provider", "aliases": ["content provider", "credential theft"]},
+  {"id": "V16", "title": "Missing SSL certificate validation", "aliases": ["SSL error", "certificate validation", "onReceivedSslError"]},
+  {"id": "V17", "title": "Insecure WebView settings", "aliases": ["WebView", "javascript enabled", "file access"]},
+  {"id": "V18", "title": "Insecure local data storage", "aliases": ["insecure storage", "unencrypted storage", "shared preferences"]},
+  {"id": "V19", "title": "Insecure logging of credentials", "aliases": ["logcat", "insecure logging", "credential logging"]}
+]

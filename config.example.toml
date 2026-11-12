@@ -1,0 +1,25 @@
+[app]
+# Change only this path when scanning a different APK.
+apk_path = "../InsecureShop.apk"
+workspace = "runs/insecureshop"
+
+[scan]
+max_chunk_chars = 6000
+max_chunks_per_request = 4
+max_request_chars = 18000
+max_scan_chunks = 60
+severity_threshold = "low"
+
+[models.teacher]
+# Example: Gemini Developer API, with GEMINI_API_KEY set in the environment.
+provider = "gemini"
+base_url = "https://generativelanguage.googleapis.com/v1beta"
+model = "gemini-3.8-flash"
+api_key_env = "GEMINI_API_KEY"
+
+[models.student]
+# OpenRouter free coding model; keeping the model fixed makes baseline and guided scans comparable.
+provider = "openai_compatible"
+base_url = "https://openrouter.ai/api/v1"
+model = "recursive/flint-v1.0:free"
+api_key_env = "OPENROUTER_API_KEY"

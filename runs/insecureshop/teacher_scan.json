@@ -1,0 +1,216 @@
+{
+  "role": "teacher",
+  "model": "gemini-3.8-flash",
+  "lessons_applied": [],
+  "chunks_scanned": 60,
+  "requests": 18,
+  "findings": [
+    {
+      "type": "Insecure Data Storage",
+      "location": "smali/com/insecureshop/util/Prefs.smali:172-177",
+      "severity": "medium",
+      "evidence": "Prefs initializes standard unencrypted SharedPreferences ('Prefs') while maintaining getters and setters for sensitive fields such as 'password' and 'username' without using EncryptedSharedPreferences or cryptographic protection.",
+      "confidence": 0.8
+    },
+    {
+      "type": "Dangerous/Broad Permission Request",
+      "location": "smali/com/insecureshop/LoginActivity.smali:198-208",
+      "severity": "low",
+      "evidence": "LoginActivity requests broad shared storage permissions ('android.permission.WRITE_EXTERNAL_STORAGE' and 'android.permission.READ_EXTERNAL_STORAGE') at initialization via requestPermissions.",
+      "confidence": 0.8
+    },
+    {
+      "type": "WebView JavaScript Enabled",
+      "location": "smali/com/insecureshop/PrivateActivity.smali:195",
+      "severity": "low",
+      "evidence": "WebSettings enables JavaScript execution via setJavaScriptEnabled(true) on the WebView instance.",
+      "confidence": 0.8
+    },
+    {
+      "type": "Information Exposure",
+      "location": "smali/com/insecureshop/contentProvider/InsecureShopProvider.smali:32-35",
+      "severity": "high",
+      "evidence": "The query() method responds to the URI 'com.insecureshop.provider/insecure' by constructing a MatrixCursor containing plaintext username and password retrieved from Prefs without verifying caller identity or access permissions.",
+      "confidence": 0.95
+    }
+  ],
+  "raw_responses": [
+    {
+      "batch": 1,
+      "chunk_ids": [
+        "AndroidManifest.xml:1:59:2678605529eb",
+        "smali/com/insecureshop/CustomReceiver.smali:1:129:5fe9ce2a01d7",
+        "smali/com/insecureshop/PrivateActivity.smali:203:264:24924510358b",
+        "smali/com/insecureshop/WebView2Activity.smali:208:433:dd43655168ef"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 2,
+      "chunk_ids": [
+        "smali/com/insecureshop/WebViewActivity.smali:203:411:6aa485a87cf3",
+        "smali/com/insecureshop/broadcast/ProductDetailBroadCast.smali:1:77:41aee4045bf2",
+        "smali/com/insecureshop/DataBinderMapperImpl$InnerLayoutIdLookup.smali:1:204:7fef342092e9"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 3,
+      "chunk_ids": [
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:1:222:3007bda15e25",
+        "smali/com/insecureshop/ProductListActivity.smali:197:380:6800710e4416",
+        "smali/com/insecureshop/R$string.smali:173:233:f8697caddaa3",
+        "smali/com/insecureshop/AboutUsActivity.smali:207:291:920a2d9e8923"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 4,
+      "chunk_ids": [
+        "smali/com/insecureshop/LoginActivity.smali:217:398:0755f0c3dea4",
+        "smali/com/insecureshop/LoginActivity.smali:399:551:0460787a0394",
+        "smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:1:97:2f83fdde48aa"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 5,
+      "chunk_ids": [
+        "smali/com/insecureshop/ProductListActivity.smali:1:196:aa2f41f86ac7",
+        "smali/com/insecureshop/R$layout.smali:1:182:47c107e5b8f5",
+        "smali/com/insecureshop/R$string.smali:1:172:dd29849abe16"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 6,
+      "chunk_ids": [
+        "smali/com/insecureshop/WebView2Activity.smali:434:456:dfc6971dec08",
+        "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:166:296:518380c76325",
+        "smali/com/insecureshop/AboutUsActivity.smali:1:206:4b97855d9c6f",
+        "smali/com/insecureshop/ChooserActivity.smali:228:464:77e1f4e7aa5d"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 7,
+      "chunk_ids": [
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:618:849:18ca57689cf7",
+        "smali/com/insecureshop/R$id.smali:407:612:541d6a962268",
+        "smali/com/insecureshop/SendingDataViaActionActivity.smali:1:202:7471038bb808"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 8,
+      "chunk_ids": [
+        "smali/com/insecureshop/contentProvider/InsecureshopFileProvider$Companion.smali:1:89:d66d68429b6b",
+        "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:1:165:dd2b5426b0a2",
+        "smali/com/insecureshop/databinding/ActivityImplicitIntentForNonExportedBinding.smali:1:145:86e755dbaeb5"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 9,
+      "chunk_ids": [
+        "smali/com/insecureshop/util/Prefs.smali:1:182:cefef81611e0",
+        "res/values/public.xml:1932:2006:cb0eacd18a5d",
+        "res/values/public.xml:2007:2081:66a942ab37a1"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure Data Storage\",\n      \"location\": \"smali/com/insecureshop/util/Prefs.smali:172-177\",\n      \"severity\": \"medium\",\n      \"evidence\": \"Prefs initializes standard unencrypted SharedPreferences ('Prefs') while maintaining getters and setters for sensitive fields such as 'password' and 'username' without using EncryptedSharedPreferences or cryptographic protection.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 10,
+      "chunk_ids": [
+        "res/values/strings.xml:83:107:1eaece141d13",
+        "smali/com/insecureshop/CartAdapter.smali:1:196:d9560a953805",
+        "smali/com/insecureshop/ChooserActivity.smali:1:227:e92cd1225de4",
+        "smali/com/insecureshop/ChooserActivity.smali:465:532:4d2f57a26bb4"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 11,
+      "chunk_ids": [
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:223:422:fd94edacae49",
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:423:617:14cf55e91471",
+        "smali/com/insecureshop/LoginActivity.smali:1:216:94e67a5b55e8"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Dangerous/Broad Permission Request\",\n      \"location\": \"smali/com/insecureshop/LoginActivity.smali:198-208\",\n      \"severity\": \"low\",\n      \"evidence\": \"LoginActivity requests broad shared storage permissions ('android.permission.WRITE_EXTERNAL_STORAGE' and 'android.permission.READ_EXTERNAL_STORAGE') at initialization via requestPermissions.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 12,
+      "chunk_ids": [
+        "smali/com/insecureshop/PrivateActivity.smali:1:202:ef82c4866880",
+        "smali/com/insecureshop/ProductAdapter.smali:200:345:595b7b2288de",
+        "smali/com/insecureshop/ProductListActivity.smali:381:416:9d13266e99db"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"WebView JavaScript Enabled\",\n      \"location\": \"smali/com/insecureshop/PrivateActivity.smali:195\",\n      \"severity\": \"low\",\n      \"evidence\": \"WebSettings enables JavaScript execution via setJavaScriptEnabled(true) on the WebView instance.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 13,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$attr.smali:1:196:fa517ab0fb55",
+        "smali/com/insecureshop/R$attr.smali:1149:1344:d576a752071e",
+        "smali/com/insecureshop/R$drawable.smali:171:327:05d384bf658b"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 14,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$id.smali:1:200:c7cc0c34f9c2",
+        "smali/com/insecureshop/R$id.smali:201:406:776a3afda2d0",
+        "smali/com/insecureshop/R$id.smali:613:693:65833fa983e4",
+        "smali/com/insecureshop/R$layout.smali:183:263:b39c296741dd"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 15,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$style.smali:439:590:c26ceb81da8d",
+        "smali/com/insecureshop/R$styleable.smali:353:514:dfd00a4603b8",
+        "smali/com/insecureshop/R$styleable.smali:1161:1332:342afd51f46f"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 16,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$styleable.smali:1887:2066:aefa386ab8af",
+        "smali/com/insecureshop/WebView2Activity.smali:1:207:e619bd6cdbd1",
+        "smali/com/insecureshop/WebViewActivity.smali:1:202:5d032bfd1f0a"
+      ],
+      "blocked": true,
+      "block_reason": "Gemini blocked this prompt: OTHER"
+    },
+    {
+      "batch": 17,
+      "chunk_ids": [
+        "smali/com/insecureshop/contentProvider/InsecureShopProvider.smali:168:296:bc9da9df863f",
+        "smali/com/insecureshop/databinding/ActivityImplicitIntentForNonExportedBindingImpl.smali:1:224:abb0a91d8fc2",
+        "smali/com/insecureshop/databinding/ActivityImplicitIntentForNonExportedBindingImpl.smali:225:282:46fc0a15a6f7",
+        "smali/com/insecureshop/databinding/ActivityLoginBinding.smali:1:133:d6d95ce0921f"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Information Exposure\",\n      \"location\": \"smali/com/insecureshop/contentProvider/InsecureShopProvider.smali:32-35\",\n      \"severity\": \"high\",\n      \"evidence\": \"The query() method responds to the URI 'com.insecureshop.provider/insecure' by constructing a MatrixCursor containing plaintext username and password retrieved from Prefs without verifying caller identity or access permissions.\",\n      \"confidence\": 0.95\n    }\n  ]\n}"
+    },
+    {
+      "batch": 18,
+      "chunk_ids": [
+        "smali/com/insecureshop/databinding/UploadSuccessDialogBinding.smali:1:151:4394e57e5353",
+        "smali/com/insecureshop/databinding/UploadSuccessDialogBindingImpl.smali:1:232:cf808d027df2",
+        "smali/com/insecureshop/databinding/UploadSuccessDialogBindingImpl.smali:233:299:eda39154d6ac"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    }
+  ]
+}

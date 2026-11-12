@@ -1,0 +1,361 @@
+{
+  "role": "student",
+  "model": "recursive/flint-v1.0:free",
+  "lessons_applied": [],
+  "chunks_scanned": 60,
+  "requests": 18,
+  "findings": [
+    {
+      "type": "Cleartext traffic enabled",
+      "location": "AndroidManifest.xml:9",
+      "severity": "medium",
+      "evidence": "The manifest sets android:usesCleartextTraffic to true and includes android.permission.INTERNET, allowing HTTP-based content or WebView navigation.",
+      "confidence": 0.95
+    },
+    {
+      "type": "Debuggable build enabled",
+      "location": "AndroidManifest.xml:9",
+      "severity": "high",
+      "evidence": "The application sets android:debuggable to true, which increases the local attack surface and debug exposure.",
+      "confidence": 0.95
+    },
+    {
+      "type": "Insecure WebView settings",
+      "location": "smali/com/insecureshop/PrivateActivity.smali:203-264; smali/com/insecureshop/WebView2Activity.smali:208-433",
+      "severity": "high",
+      "evidence": "Both WebViews enable JavaScript and call setAllowUniversalAccessFromFileURLs(true), allowing file-based content to access broader resources.",
+      "confidence": 0.9
+    },
+    {
+      "type": "Unvalidated WebView navigation",
+      "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+      "severity": "medium",
+      "evidence": "The activity obtains a url from Intent data or extras and passes it to WebView.loadUrl without validation.",
+      "confidence": 0.85
+    },
+    {
+      "type": "Backup allowed",
+      "location": "AndroidManifest.xml:9",
+      "severity": "low",
+      "evidence": "The manifest sets android:allowBackup to true, which may expose app data through backups.",
+      "confidence": 0.9
+    },
+    {
+      "type": "Exported components without permissions",
+      "location": "AndroidManifest.xml:52-57",
+      "severity": "medium",
+      "evidence": "ResultActivity, InsecureShopProvider, and UploadService are exported true; the provider uses a custom read permission and the service lacks permission restrictions.",
+      "confidence": 0.8
+    },
+    {
+      "type": "WebView file access enabled",
+      "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+      "severity": "medium",
+      "evidence": "The decompiled WebView setup calls WebSettings.setAllowUniversalAccessFromFileURLs, which can permit WebView content to access file:// resources if enabled.",
+      "confidence": 0.85
+    },
+    {
+      "type": "Insecure WebView navigation handling",
+      "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+      "severity": "medium",
+      "evidence": "The code loads a URL derived from intent query parameters via WebView.loadUrl and applies a domain suffix check only for the /webview path, leaving the /web path or other unvalidated values potentially navigable.",
+      "confidence": 0.75
+    },
+    {
+      "type": "credential_exposure",
+      "location": "smali/com/insecureshop/AboutUsActivity.smali:29-35",
+      "severity": "high",
+      "evidence": "The code retrieves username and password from Prefs, places them into Intent extras of a broadcast with action com.insecureshop.action.BROADCAST, and calls sendBroadcast without recipient, permission, or encryption controls.",
+      "confidence": 0.9
+    },
+    {
+      "type": "missing_broadcast_export_flag",
+      "location": "smali/com/insecureshop/ProductListActivity.smali:30-31",
+      "severity": "medium",
+      "evidence": "The code registers a BroadcastReceiver with an IntentFilter for com.insecureshop.action.PRODUCT_DETAIL using the two-argument registerReceiver form without specifying RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED.",
+      "confidence": 0.85
+    },
+    {
+      "type": "plaintext credential storage",
+      "location": "smali/com/insecureshop/LoginActivity.smali:46-47",
+      "severity": "high",
+      "evidence": "After successful authentication, the code calls Prefs.setUsername and Prefs.setPassword to persist the username and password.",
+      "confidence": 0.95
+    },
+    {
+      "type": "sensitive data logging",
+      "location": "smali/com/insecureshop/LoginActivity.smali:39-40",
+      "severity": "medium",
+      "evidence": "The code logs the username and password using Log.d with tags \"userName\" and \"password\".",
+      "confidence": 0.95
+    },
+    {
+      "type": "unsafe dynamic reflection",
+      "location": "smali/com/insecureshop/LoginActivity.smali:52-60",
+      "severity": "medium",
+      "evidence": "The code creates a package context, loads the class com.insecureshopapp.MainInterface through the class loader, and invokes its getInstance method reflectively.",
+      "confidence": 0.85
+    },
+    {
+      "type": "implicit broadcast",
+      "location": "smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:52-55",
+      "severity": "medium",
+      "evidence": "The click handler creates an implicit Intent with the action com.insecureshop.action.PRODUCT_DETAIL and sends it via Context.sendBroadcast.",
+      "confidence": 0.8
+    },
+    {
+      "type": "hardcoded backend identifier",
+      "location": "smali/com/insecureshop/R$string.smali:1-172",
+      "severity": "low",
+      "evidence": "The decompiled R$string file contains a field named `aws_Identity_pool_ID` with resource ID `0x7f10001e`, indicating a potentially hardcoded AWS Identity Pool identifier in client-side resources.",
+      "confidence": 0.6
+    },
+    {
+      "type": "Insecure WebView Navigation",
+      "location": "smali/com/insecureshop/WebView2Activity.smali:434-456",
+      "severity": "medium",
+      "evidence": "The code obtains a String from the Intent's Bundle via Bundle.getString and passes it to WebView.loadUrl without validating the URL first.",
+      "confidence": 0.8
+    },
+    {
+      "type": "Sensitive Data Exposure via Content Provider",
+      "location": "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:166-296",
+      "severity": "high",
+      "evidence": "The query method builds a MatrixCursor with username and password columns and adds a row from Prefs, returning credentials through the content provider; update returns 0.",
+      "confidence": 0.95
+    },
+    {
+      "type": "Insecure Intent Handling",
+      "location": "smali/com/insecureshop/SendingDataViaActionActivity.smali:24-26",
+      "severity": "medium",
+      "evidence": "The code creates an implicit Intent using only the custom action string 'com.insecureshop.action.WEBVIEW' and adds a URL extra, without setting an explicit component or package or enforcing a custom permission.",
+      "confidence": 0.8
+    },
+    {
+      "type": "missing content provider authorization",
+      "location": "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:41-49",
+      "severity": "medium",
+      "evidence": "The getType, insert, and delete methods return default values (empty string, null, and 0) without validating the incoming URI or checking caller permissions, indicating no access control or file handling is performed.",
+      "confidence": 0.6
+    },
+    {
+      "type": "mutable uri matcher exposed",
+      "location": "smali/com/insecureshop/contentProvider/InsecureshopFileProvider$Companion.smali:15",
+      "severity": "low",
+      "evidence": "The Companion exposes a public setUriMatcher method that writes to a static UriMatcher field, allowing runtime modification of URI matching state.",
+      "confidence": 0.7
+    },
+    {
+      "type": "plaintext sensitive data storage",
+      "location": "smali/com/insecureshop/util/Prefs.smali:21",
+      "severity": "high",
+      "evidence": "The Prefs implementation reads and clears values through Android SharedPreferences, and the class metadata lists data, password, and username preference keys. No encryption or secure Keystore handling is visible in the supplied code.",
+      "confidence": 0.9
+    },
+    {
+      "type": "Insecure File Storage",
+      "location": "smali/com/insecureshop/ChooserActivity.smali:30-47",
+      "severity": "medium",
+      "evidence": "The makeTempCopy method writes a picked content Uri into Environment.getExternalStorageDirectory()/insecureshop using File.createNewFile and ContentResolver streams, without restrictive file permissions or app-specific storage.",
+      "confidence": 0.75
+    },
+    {
+      "type": "Excessive Storage Permissions",
+      "location": "smali/com/insecureshop/LoginActivity.smali:28-32",
+      "severity": "medium",
+      "evidence": "The onCreate method requests both android.permission.WRITE_EXTERNAL_STORAGE and android.permission.READ_EXTERNAL_STORAGE via requestPermissions, with no visible justification or scoped-storage handling.",
+      "confidence": 0.9
+    },
+    {
+      "type": "Insecure WebView Configuration",
+      "location": "smali/com/insecureshop/PrivateActivity.smali:24-25",
+      "severity": "medium",
+      "evidence": "The WebView settings explicitly call setJavaScriptEnabled(true), enabling JavaScript execution within the WebView.",
+      "confidence": 0.85
+    },
+    {
+      "type": "WebView JavaScript Enabled",
+      "location": "smali/com/insecureshop/WebViewActivity.smali:26",
+      "severity": "medium",
+      "evidence": "The decompiled WebView code explicitly sets the WebView JavaScript setting to enabled using const/4 v3, 0x1 and invoke-virtual {v1}, Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V.",
+      "confidence": 0.9
+    },
+    {
+      "type": "sensitive data exposure via content provider",
+      "location": "smali/com/insecureshop/contentProvider/InsecureShopProvider.smali:168-296",
+      "severity": "high",
+      "evidence": "The query method returns a MatrixCursor containing username and password columns populated from Prefs.getUsername() and Prefs.getPassword(), without any observed authorization or access control check.",
+      "confidence": 0.9
+    }
+  ],
+  "raw_responses": [
+    {
+      "batch": 1,
+      "chunk_ids": [
+        "AndroidManifest.xml:1:59:2678605529eb",
+        "smali/com/insecureshop/CustomReceiver.smali:1:129:5fe9ce2a01d7",
+        "smali/com/insecureshop/PrivateActivity.smali:203:264:24924510358b",
+        "smali/com/insecureshop/WebView2Activity.smali:208:433:dd43655168ef"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Cleartext traffic enabled\",\n      \"location\": \"AndroidManifest.xml:9\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The manifest sets android:usesCleartextTraffic to true and includes android.permission.INTERNET, allowing HTTP-based content or WebView navigation.\",\n      \"confidence\": 0.95\n    },\n    {\n      \"type\": \"Debuggable build enabled\",\n      \"location\": \"AndroidManifest.xml:9\",\n      \"severity\": \"high\",\n      \"evidence\": \"The application sets android:debuggable to true, which increases the local attack surface and debug exposure.\",\n      \"confidence\": 0.95\n    },\n    {\n      \"type\": \"Insecure WebView settings\",\n      \"location\": \"smali/com/insecureshop/PrivateActivity.smali:203-264; smali/com/insecureshop/WebView2Activity.smali:208-433\",\n      \"severity\": \"high\",\n      \"evidence\": \"Both WebViews enable JavaScript and call setAllowUniversalAccessFromFileURLs(true), allowing file-based content to access broader resources.\",\n      \"confidence\": 0.9\n    },\n    {\n      \"type\": \"Unvalidated WebView navigation\",\n      \"location\": \"smali/com/insecureshop/WebView2Activity.smali:208-433\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The activity obtains a url from Intent data or extras and passes it to WebView.loadUrl without validation.\",\n      \"confidence\": 0.85\n    },\n    {\n      \"type\": \"Backup allowed\",\n      \"location\": \"AndroidManifest.xml:9\",\n      \"severity\": \"low\",\n      \"evidence\": \"The manifest sets android:allowBackup to true, which may expose app data through backups.\",\n      \"confidence\": 0.9\n    },\n    {\n      \"type\": \"Exported components without permissions\",\n      \"location\": \"AndroidManifest.xml:52-57\",\n      \"severity\": \"medium\",\n      \"evidence\": \"ResultActivity, InsecureShopProvider, and UploadService are exported true; the provider uses a custom read permission and the service lacks permission restrictions.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 2,
+      "chunk_ids": [
+        "smali/com/insecureshop/WebViewActivity.smali:203:411:6aa485a87cf3",
+        "smali/com/insecureshop/broadcast/ProductDetailBroadCast.smali:1:77:41aee4045bf2",
+        "smali/com/insecureshop/DataBinderMapperImpl$InnerLayoutIdLookup.smali:1:204:7fef342092e9"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"WebView file access enabled\",\n      \"location\": \"smali/com/insecureshop/WebViewActivity.smali:203-411\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The decompiled WebView setup calls WebSettings.setAllowUniversalAccessFromFileURLs, which can permit WebView content to access file:// resources if enabled.\",\n      \"confidence\": 0.85\n    },\n    {\n      \"type\": \"Insecure WebView navigation handling\",\n      \"location\": \"smali/com/insecureshop/WebViewActivity.smali:203-411\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code loads a URL derived from intent query parameters via WebView.loadUrl and applies a domain suffix check only for the /webview path, leaving the /web path or other unvalidated values potentially navigable.\",\n      \"confidence\": 0.75\n    }\n  ]\n}"
+    },
+    {
+      "batch": 3,
+      "chunk_ids": [
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:1:222:3007bda15e25",
+        "smali/com/insecureshop/ProductListActivity.smali:197:380:6800710e4416",
+        "smali/com/insecureshop/R$string.smali:173:233:f8697caddaa3",
+        "smali/com/insecureshop/AboutUsActivity.smali:207:291:920a2d9e8923"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"credential_exposure\",\n      \"location\": \"smali/com/insecureshop/AboutUsActivity.smali:29-35\",\n      \"severity\": \"high\",\n      \"evidence\": \"The code retrieves username and password from Prefs, places them into Intent extras of a broadcast with action com.insecureshop.action.BROADCAST, and calls sendBroadcast without recipient, permission, or encryption controls.\",\n      \"confidence\": 0.9\n    },\n    {\n      \"type\": \"missing_broadcast_export_flag\",\n      \"location\": \"smali/com/insecureshop/ProductListActivity.smali:30-31\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code registers a BroadcastReceiver with an IntentFilter for com.insecureshop.action.PRODUCT_DETAIL using the two-argument registerReceiver form without specifying RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED.\",\n      \"confidence\": 0.85\n    }\n  ]\n}"
+    },
+    {
+      "batch": 4,
+      "chunk_ids": [
+        "smali/com/insecureshop/LoginActivity.smali:217:398:0755f0c3dea4",
+        "smali/com/insecureshop/LoginActivity.smali:399:551:0460787a0394",
+        "smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:1:97:2f83fdde48aa"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"plaintext credential storage\",\n      \"location\": \"smali/com/insecureshop/LoginActivity.smali:46-47\",\n      \"severity\": \"high\",\n      \"evidence\": \"After successful authentication, the code calls Prefs.setUsername and Prefs.setPassword to persist the username and password.\",\n      \"confidence\": 0.95\n    },\n    {\n      \"type\": \"sensitive data logging\",\n      \"location\": \"smali/com/insecureshop/LoginActivity.smali:39-40\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code logs the username and password using Log.d with tags \\\"userName\\\" and \\\"password\\\".\",\n      \"confidence\": 0.95\n    },\n    {\n      \"type\": \"unsafe dynamic reflection\",\n      \"location\": \"smali/com/insecureshop/LoginActivity.smali:52-60\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code creates a package context, loads the class com.insecureshopapp.MainInterface through the class loader, and invokes its getInstance method reflectively.\",\n      \"confidence\": 0.85\n    },\n    {\n      \"type\": \"implicit broadcast\",\n      \"location\": \"smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:52-55\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The click handler creates an implicit Intent with the action com.insecureshop.action.PRODUCT_DETAIL and sends it via Context.sendBroadcast.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 5,
+      "chunk_ids": [
+        "smali/com/insecureshop/ProductListActivity.smali:1:196:aa2f41f86ac7",
+        "smali/com/insecureshop/R$layout.smali:1:182:47c107e5b8f5",
+        "smali/com/insecureshop/R$string.smali:1:172:dd29849abe16"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"hardcoded backend identifier\",\n      \"location\": \"smali/com/insecureshop/R$string.smali:1-172\",\n      \"severity\": \"low\",\n      \"evidence\": \"The decompiled R$string file contains a field named `aws_Identity_pool_ID` with resource ID `0x7f10001e`, indicating a potentially hardcoded AWS Identity Pool identifier in client-side resources.\",\n      \"confidence\": 0.6\n    }\n  ]\n}"
+    },
+    {
+      "batch": 6,
+      "chunk_ids": [
+        "smali/com/insecureshop/WebView2Activity.smali:434:456:dfc6971dec08",
+        "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:166:296:518380c76325",
+        "smali/com/insecureshop/AboutUsActivity.smali:1:206:4b97855d9c6f",
+        "smali/com/insecureshop/ChooserActivity.smali:228:464:77e1f4e7aa5d"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure WebView Navigation\",\n      \"location\": \"smali/com/insecureshop/WebView2Activity.smali:434-456\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code obtains a String from the Intent's Bundle via Bundle.getString and passes it to WebView.loadUrl without validating the URL first.\",\n      \"confidence\": 0.8\n    },\n    {\n      \"type\": \"Sensitive Data Exposure via Content Provider\",\n      \"location\": \"smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:166-296\",\n      \"severity\": \"high\",\n      \"evidence\": \"The query method builds a MatrixCursor with username and password columns and adds a row from Prefs, returning credentials through the content provider; update returns 0.\",\n      \"confidence\": 0.95\n    }\n  ]\n}"
+    },
+    {
+      "batch": 7,
+      "chunk_ids": [
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:618:849:18ca57689cf7",
+        "smali/com/insecureshop/R$id.smali:407:612:541d6a962268",
+        "smali/com/insecureshop/SendingDataViaActionActivity.smali:1:202:7471038bb808"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure Intent Handling\",\n      \"location\": \"smali/com/insecureshop/SendingDataViaActionActivity.smali:24-26\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code creates an implicit Intent using only the custom action string 'com.insecureshop.action.WEBVIEW' and adds a URL extra, without setting an explicit component or package or enforcing a custom permission.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 8,
+      "chunk_ids": [
+        "smali/com/insecureshop/contentProvider/InsecureshopFileProvider$Companion.smali:1:89:d66d68429b6b",
+        "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:1:165:dd2b5426b0a2",
+        "smali/com/insecureshop/databinding/ActivityImplicitIntentForNonExportedBinding.smali:1:145:86e755dbaeb5"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"missing content provider authorization\",\n      \"location\": \"smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:41-49\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The getType, insert, and delete methods return default values (empty string, null, and 0) without validating the incoming URI or checking caller permissions, indicating no access control or file handling is performed.\",\n      \"confidence\": 0.6\n    },\n    {\n      \"type\": \"mutable uri matcher exposed\",\n      \"location\": \"smali/com/insecureshop/contentProvider/InsecureshopFileProvider$Companion.smali:15\",\n      \"severity\": \"low\",\n      \"evidence\": \"The Companion exposes a public setUriMatcher method that writes to a static UriMatcher field, allowing runtime modification of URI matching state.\",\n      \"confidence\": 0.7\n    }\n  ]\n}"
+    },
+    {
+      "batch": 9,
+      "chunk_ids": [
+        "smali/com/insecureshop/util/Prefs.smali:1:182:cefef81611e0",
+        "res/values/public.xml:1932:2006:cb0eacd18a5d",
+        "res/values/public.xml:2007:2081:66a942ab37a1"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"plaintext sensitive data storage\",\n      \"location\": \"smali/com/insecureshop/util/Prefs.smali:21\",\n      \"severity\": \"high\",\n      \"evidence\": \"The Prefs implementation reads and clears values through Android SharedPreferences, and the class metadata lists data, password, and username preference keys. No encryption or secure Keystore handling is visible in the supplied code.\",\n      \"confidence\": 0.9\n    }\n  ]\n}"
+    },
+    {
+      "batch": 10,
+      "chunk_ids": [
+        "res/values/strings.xml:83:107:1eaece141d13",
+        "smali/com/insecureshop/CartAdapter.smali:1:196:d9560a953805",
+        "smali/com/insecureshop/ChooserActivity.smali:1:227:e92cd1225de4",
+        "smali/com/insecureshop/ChooserActivity.smali:465:532:4d2f57a26bb4"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure File Storage\",\n      \"location\": \"smali/com/insecureshop/ChooserActivity.smali:30-47\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The makeTempCopy method writes a picked content Uri into Environment.getExternalStorageDirectory()/insecureshop using File.createNewFile and ContentResolver streams, without restrictive file permissions or app-specific storage.\",\n      \"confidence\": 0.75\n    }\n  ]\n}"
+    },
+    {
+      "batch": 11,
+      "chunk_ids": [
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:223:422:fd94edacae49",
+        "smali/com/insecureshop/DataBinderMapperImpl.smali:423:617:14cf55e91471",
+        "smali/com/insecureshop/LoginActivity.smali:1:216:94e67a5b55e8"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Excessive Storage Permissions\",\n      \"location\": \"smali/com/insecureshop/LoginActivity.smali:28-32\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The onCreate method requests both android.permission.WRITE_EXTERNAL_STORAGE and android.permission.READ_EXTERNAL_STORAGE via requestPermissions, with no visible justification or scoped-storage handling.\",\n      \"confidence\": 0.9\n    }\n  ]\n}"
+    },
+    {
+      "batch": 12,
+      "chunk_ids": [
+        "smali/com/insecureshop/PrivateActivity.smali:1:202:ef82c4866880",
+        "smali/com/insecureshop/ProductAdapter.smali:200:345:595b7b2288de",
+        "smali/com/insecureshop/ProductListActivity.smali:381:416:9d13266e99db"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure WebView Configuration\",\n      \"location\": \"smali/com/insecureshop/PrivateActivity.smali:24-25\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The WebView settings explicitly call setJavaScriptEnabled(true), enabling JavaScript execution within the WebView.\",\n      \"confidence\": 0.85\n    }\n  ]\n}"
+    },
+    {
+      "batch": 13,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$attr.smali:1:196:fa517ab0fb55",
+        "smali/com/insecureshop/R$attr.smali:1149:1344:d576a752071e",
+        "smali/com/insecureshop/R$drawable.smali:171:327:05d384bf658b"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 14,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$id.smali:1:200:c7cc0c34f9c2",
+        "smali/com/insecureshop/R$id.smali:201:406:776a3afda2d0",
+        "smali/com/insecureshop/R$id.smali:613:693:65833fa983e4",
+        "smali/com/insecureshop/R$layout.smali:183:263:b39c296741dd"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 15,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$style.smali:439:590:c26ceb81da8d",
+        "smali/com/insecureshop/R$styleable.smali:353:514:dfd00a4603b8",
+        "smali/com/insecureshop/R$styleable.smali:1161:1332:342afd51f46f"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    },
+    {
+      "batch": 16,
+      "chunk_ids": [
+        "smali/com/insecureshop/R$styleable.smali:1887:2066:aefa386ab8af",
+        "smali/com/insecureshop/WebView2Activity.smali:1:207:e619bd6cdbd1",
+        "smali/com/insecureshop/WebViewActivity.smali:1:202:5d032bfd1f0a"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"WebView JavaScript Enabled\",\n      \"location\": \"smali/com/insecureshop/WebViewActivity.smali:26\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The decompiled WebView code explicitly sets the WebView JavaScript setting to enabled using const/4 v3, 0x1 and invoke-virtual {v1}, Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V.\",\n      \"confidence\": 0.9\n    }\n  ]\n}"
+    },
+    {
+      "batch": 17,
+      "chunk_ids": [
+        "smali/com/insecureshop/contentProvider/InsecureShopProvider.smali:168:296:bc9da9df863f",
+        "smali/com/insecureshop/databinding/ActivityImplicitIntentForNonExportedBindingImpl.smali:1:224:abb0a91d8fc2",
+        "smali/com/insecureshop/databinding/ActivityImplicitIntentForNonExportedBindingImpl.smali:225:282:46fc0a15a6f7",
+        "smali/com/insecureshop/databinding/ActivityLoginBinding.smali:1:133:d6d95ce0921f"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"sensitive data exposure via content provider\",\n      \"location\": \"smali/com/insecureshop/contentProvider/InsecureShopProvider.smali:168-296\",\n      \"severity\": \"high\",\n      \"evidence\": \"The query method returns a MatrixCursor containing username and password columns populated from Prefs.getUsername() and Prefs.getPassword(), without any observed authorization or access control check.\",\n      \"confidence\": 0.9\n    }\n  ]\n}"
+    },
+    {
+      "batch": 18,
+      "chunk_ids": [
+        "smali/com/insecureshop/databinding/UploadSuccessDialogBinding.smali:1:151:4394e57e5353",
+        "smali/com/insecureshop/databinding/UploadSuccessDialogBindingImpl.smali:1:232:cf808d027df2",
+        "smali/com/insecureshop/databinding/UploadSuccessDialogBindingImpl.smali:233:299:eda39154d6ac"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    }
+  ]
+}
