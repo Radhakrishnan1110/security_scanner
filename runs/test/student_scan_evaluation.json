@@ -1,0 +1,938 @@
+{
+  "scan": "runs\\insecureshop\\student_scan.json",
+  "ground_truth": "ground_truth\\insecureshop.json",
+  "ground_truth_count": 19,
+  "finding_count": 31,
+  "confirmed_matches": {
+    "V02": 6,
+    "V03": 9,
+    "V06": 18,
+    "V07": 23,
+    "V12": 10,
+    "V13": 20,
+    "V15": 30,
+    "V17": 3,
+    "V18": 22,
+    "V19": 12
+  },
+  "confirmed_recall": 0.5263157894736842,
+  "unmatched_ground_truth": [
+    {
+      "id": "V01",
+      "title": "Hardcoded credentials",
+      "aliases": [
+        "hardcoded credential",
+        "embedded password",
+        "hard-coded credential"
+      ]
+    },
+    {
+      "id": "V04",
+      "title": "Arbitrary code execution through package context",
+      "aliases": [
+        "arbitrary code execution",
+        "package context"
+      ]
+    },
+    {
+      "id": "V05",
+      "title": "Access to protected components",
+      "aliases": [
+        "intent redirection",
+        "protected component",
+        "embedded intent"
+      ]
+    },
+    {
+      "id": "V08",
+      "title": "Known vulnerable component",
+      "aliases": [
+        "known vulnerable",
+        "vulnerable library",
+        "third-party component"
+      ]
+    },
+    {
+      "id": "V09",
+      "title": "Insecure broadcast receiver",
+      "aliases": [
+        "broadcast receiver",
+        "web_url broadcast"
+      ]
+    },
+    {
+      "id": "V10",
+      "title": "AWS Cognito misconfiguration",
+      "aliases": [
+        "AWS Cognito",
+        "S3 bucket",
+        "Cognito"
+      ]
+    },
+    {
+      "id": "V11",
+      "title": "Insecure FileProvider paths",
+      "aliases": [
+        "FileProvider",
+        "file paths",
+        "root directory sharing"
+      ]
+    },
+    {
+      "id": "V14",
+      "title": "Insecure setResult implementation",
+      "aliases": [
+        "setResult",
+        "content provider access"
+      ]
+    },
+    {
+      "id": "V16",
+      "title": "Missing SSL certificate validation",
+      "aliases": [
+        "SSL error",
+        "certificate validation",
+        "onReceivedSslError"
+      ]
+    }
+  ],
+  "candidate_matches_for_manual_review": [
+    {
+      "ground_truth": {
+        "id": "V01",
+        "title": "Hardcoded credentials",
+        "aliases": [
+          "hardcoded credential",
+          "embedded password",
+          "hard-coded credential"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 16,
+          "score": 0.6,
+          "finding": {
+            "type": "hardcoded credential",
+            "location": "smali/com/insecureshop/R$string.smali:76",
+            "severity": "medium",
+            "evidence": "Resource named aws_Identity_pool_ID was detected, which may contain a hardcoded AWS Identity Pool ID.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 12,
+          "score": 0.1,
+          "finding": {
+            "type": "sensitive-data-logging",
+            "location": "smali/com/insecureshop/LoginActivity.smali:39-40",
+            "severity": "medium",
+            "evidence": "The code calls Log.d with the username and password strings, which may write credentials to logcat.",
+            "confidence": 0.95
+          }
+        },
+        {
+          "finding_index": 19,
+          "score": 0.1,
+          "finding": {
+            "type": "Credential Exposure via Content Provider",
+            "location": "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:166-296",
+            "severity": "high",
+            "evidence": "The query method returns a MatrixCursor containing username and password columns populated from Prefs, allowing the matching URI to return stored credentials without access control.",
+            "confidence": 0.95
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V02",
+        "title": "Insufficient URL validation",
+        "aliases": [
+          "arbitrary URL",
+          "unvalidated URL",
+          "deep link URL validation"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 6,
+          "score": 0.2,
+          "finding": {
+            "type": "Unvalidated WebView URL",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "medium",
+            "evidence": "The WebView loads URLs from intent data, query parameters, or extras without validation.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 9,
+          "score": 0.2,
+          "finding": {
+            "type": "WebView navigation lacks URL validation",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "medium",
+            "evidence": "The code reads a URL from intent data or query parameters and calls WebView.loadUrl without a robust allowlist or scheme/host validation before loading.",
+            "confidence": 0.75
+          }
+        },
+        {
+          "finding_index": 18,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure WebView URL Handling",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:434-456",
+            "severity": "medium",
+            "evidence": "The WebView loads a URL obtained from the Intent extras via Bundle.getString and passes it to WebView.loadUrl without validating the URL or scheme.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V03",
+        "title": "Weak host validation",
+        "aliases": [
+          "host validation bypass",
+          "weak host validation"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 9,
+          "score": 0.2,
+          "finding": {
+            "type": "WebView navigation lacks URL validation",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "medium",
+            "evidence": "The code reads a URL from intent data or query parameters and calls WebView.loadUrl without a robust allowlist or scheme/host validation before loading.",
+            "confidence": 0.75
+          }
+        },
+        {
+          "finding_index": 6,
+          "score": 0.1,
+          "finding": {
+            "type": "Unvalidated WebView URL",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "medium",
+            "evidence": "The WebView loads URLs from intent data, query parameters, or extras without validation.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 24,
+          "score": 0.1,
+          "finding": {
+            "type": "Improper Input Validation",
+            "location": "smali/com/insecureshop/ChooserActivity.smali:34-38",
+            "severity": "medium",
+            "evidence": "The temporary file path is constructed with new File(File, String) using the original_filename parameter, which may be derived from user-controlled input and is not sanitized before being used in a filesystem path.",
+            "confidence": 0.7
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V04",
+        "title": "Arbitrary code execution through package context",
+        "aliases": [
+          "arbitrary code execution",
+          "package context"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 14,
+          "score": 0.2,
+          "finding": {
+            "type": "unsafe-dynamic-reflection",
+            "location": "smali/com/insecureshop/LoginActivity.smali:51-63",
+            "severity": "medium",
+            "evidence": "The code uses ClassLoader.loadClass, getMethod, and invoke to load and invoke a class through reflection.",
+            "confidence": 0.75
+          }
+        },
+        {
+          "finding_index": 15,
+          "score": 0.2,
+          "finding": {
+            "type": "improper-broadcast-handling",
+            "location": "smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:52-55",
+            "severity": "low",
+            "evidence": "The code creates an implicit Intent with an action string and sends it via sendBroadcast without specifying a package or explicit component.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 20,
+          "score": 0.2,
+          "finding": {
+            "type": "improper_intent_handling",
+            "location": "smali/com/insecureshop/SendingDataViaActionActivity.smali:24-27",
+            "severity": "medium",
+            "evidence": "The code creates an Intent with only the custom action 'com.insecureshop.action.WEBVIEW' and sets an extra 'url' to a hardcoded URL, then calls startActivity without specifying an explicit component or package.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V05",
+        "title": "Access to protected components",
+        "aliases": [
+          "intent redirection",
+          "protected component",
+          "embedded intent"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 3,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView Universal Access from File URLs",
+            "location": "smali/com/insecureshop/PrivateActivity.smali:203-264",
+            "severity": "high",
+            "evidence": "WebSettings.setAllowUniversalAccessFromFileURLs(true) is called, allowing universal access from file URLs.",
+            "confidence": 0.9
+          }
+        },
+        {
+          "finding_index": 4,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView Universal Access from File URLs",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "high",
+            "evidence": "WebSettings.setAllowUniversalAccessFromFileURLs(true) is called, allowing universal access from file URLs.",
+            "confidence": 0.9
+          }
+        },
+        {
+          "finding_index": 8,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView file access enabled",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "high",
+            "evidence": "The WebView setup calls WebSettings.setAllowUniversalAccessFromFileURLs, a sensitive file-access setting that can permit web content to access file:// resources when enabled.",
+            "confidence": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V06",
+        "title": "Unprotected data URIs",
+        "aliases": [
+          "data URI",
+          "untrusted URI",
+          "loadUrl"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 9,
+          "score": 0.6,
+          "finding": {
+            "type": "WebView navigation lacks URL validation",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "medium",
+            "evidence": "The code reads a URL from intent data or query parameters and calls WebView.loadUrl without a robust allowlist or scheme/host validation before loading.",
+            "confidence": 0.75
+          }
+        },
+        {
+          "finding_index": 18,
+          "score": 0.5,
+          "finding": {
+            "type": "Insecure WebView URL Handling",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:434-456",
+            "severity": "medium",
+            "evidence": "The WebView loads a URL obtained from the Intent extras via Bundle.getString and passes it to WebView.loadUrl without validating the URL or scheme.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 2,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V07",
+        "title": "Arbitrary file theft through chooser",
+        "aliases": [
+          "arbitrary file",
+          "file theft",
+          "chooser"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 3,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView Universal Access from File URLs",
+            "location": "smali/com/insecureshop/PrivateActivity.smali:203-264",
+            "severity": "high",
+            "evidence": "WebSettings.setAllowUniversalAccessFromFileURLs(true) is called, allowing universal access from file URLs.",
+            "confidence": 0.9
+          }
+        },
+        {
+          "finding_index": 4,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView Universal Access from File URLs",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "high",
+            "evidence": "WebSettings.setAllowUniversalAccessFromFileURLs(true) is called, allowing universal access from file URLs.",
+            "confidence": 0.9
+          }
+        },
+        {
+          "finding_index": 8,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView file access enabled",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "high",
+            "evidence": "The WebView setup calls WebSettings.setAllowUniversalAccessFromFileURLs, a sensitive file-access setting that can permit web content to access file:// resources when enabled.",
+            "confidence": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V08",
+        "title": "Known vulnerable component",
+        "aliases": [
+          "known vulnerable",
+          "vulnerable library",
+          "third-party component"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 15,
+          "score": 0.1,
+          "finding": {
+            "type": "improper-broadcast-handling",
+            "location": "smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:52-55",
+            "severity": "low",
+            "evidence": "The code creates an implicit Intent with an action string and sends it via sendBroadcast without specifying a package or explicit component.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 20,
+          "score": 0.1,
+          "finding": {
+            "type": "improper_intent_handling",
+            "location": "smali/com/insecureshop/SendingDataViaActionActivity.smali:24-27",
+            "severity": "medium",
+            "evidence": "The code creates an Intent with only the custom action 'com.insecureshop.action.WEBVIEW' and sets an extra 'url' to a hardcoded URL, then calls startActivity without specifying an explicit component or package.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V09",
+        "title": "Insecure broadcast receiver",
+        "aliases": [
+          "broadcast receiver",
+          "web_url broadcast"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 11,
+          "score": 0.2,
+          "finding": {
+            "type": "missing_broadcast_export_flag",
+            "location": "smali/com/insecureshop/ProductListActivity.smali:30-31",
+            "severity": "medium",
+            "evidence": "The code registers a BroadcastReceiver with an IntentFilter for com.insecureshop.action.PRODUCT_DETAIL using the two-argument registerReceiver form without specifying RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 2,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 10,
+          "score": 0.1,
+          "finding": {
+            "type": "credential_exposure",
+            "location": "smali/com/insecureshop/AboutUsActivity.smali:29-35",
+            "severity": "high",
+            "evidence": "The code retrieves username and password from Prefs, places them into Intent extras of a broadcast with action com.insecureshop.action.BROADCAST, and calls sendBroadcast without recipient, permission, or encryption controls.",
+            "confidence": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V10",
+        "title": "AWS Cognito misconfiguration",
+        "aliases": [
+          "AWS Cognito",
+          "S3 bucket",
+          "Cognito"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 16,
+          "score": 0.1,
+          "finding": {
+            "type": "hardcoded credential",
+            "location": "smali/com/insecureshop/R$string.smali:76",
+            "severity": "medium",
+            "evidence": "Resource named aws_Identity_pool_ID was detected, which may contain a hardcoded AWS Identity Pool ID.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V11",
+        "title": "Insecure FileProvider paths",
+        "aliases": [
+          "FileProvider",
+          "file paths",
+          "root directory sharing"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 2,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 17,
+          "score": 0.1,
+          "finding": {
+            "type": "insecure intent",
+            "location": "smali/com/insecureshop/R$layout.smali:78",
+            "severity": "low",
+            "evidence": "Resource named activity_implicit_intent_for_non_exported was detected, which suggests an attempt to handle implicit intents for a non-exported activity.",
+            "confidence": 0.6
+          }
+        },
+        {
+          "finding_index": 18,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure WebView URL Handling",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:434-456",
+            "severity": "medium",
+            "evidence": "The WebView loads a URL obtained from the Intent extras via Bundle.getString and passes it to WebView.loadUrl without validating the URL or scheme.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V12",
+        "title": "Sensitive data sent with implicit intent",
+        "aliases": [
+          "implicit intent",
+          "sensitive data",
+          "credential interception"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 15,
+          "score": 0.8,
+          "finding": {
+            "type": "improper-broadcast-handling",
+            "location": "smali/com/insecureshop/ProductAdapter$onBindViewHolder$3.smali:52-55",
+            "severity": "low",
+            "evidence": "The code creates an implicit Intent with an action string and sends it via sendBroadcast without specifying a package or explicit component.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 17,
+          "score": 0.7,
+          "finding": {
+            "type": "insecure intent",
+            "location": "smali/com/insecureshop/R$layout.smali:78",
+            "severity": "low",
+            "evidence": "Resource named activity_implicit_intent_for_non_exported was detected, which suggests an attempt to handle implicit intents for a non-exported activity.",
+            "confidence": 0.6
+          }
+        },
+        {
+          "finding_index": 22,
+          "score": 0.7,
+          "finding": {
+            "type": "plaintext sensitive data storage",
+            "location": "smali/com/insecureshop/util/Prefs.smali:12-47",
+            "severity": "high",
+            "evidence": "The Prefs class uses a plain SharedPreferences instance and stores or retrieves sensitive values such as data, password, and username through it, without any encryption or Keystore-backed storage mechanism observed.",
+            "confidence": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V13",
+        "title": "Implicit intent loads arbitrary URL",
+        "aliases": [
+          "implicit intent",
+          "arbitrary URL",
+          "webview"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 6,
+          "score": 0.8,
+          "finding": {
+            "type": "Unvalidated WebView URL",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "medium",
+            "evidence": "The WebView loads URLs from intent data, query parameters, or extras without validation.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 18,
+          "score": 0.8,
+          "finding": {
+            "type": "Insecure WebView URL Handling",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:434-456",
+            "severity": "medium",
+            "evidence": "The WebView loads a URL obtained from the Intent extras via Bundle.getString and passes it to WebView.loadUrl without validating the URL or scheme.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 9,
+          "score": 0.7,
+          "finding": {
+            "type": "WebView navigation lacks URL validation",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "medium",
+            "evidence": "The code reads a URL from intent data or query parameters and calls WebView.loadUrl without a robust allowlist or scheme/host validation before loading.",
+            "confidence": 0.75
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V14",
+        "title": "Insecure setResult implementation",
+        "aliases": [
+          "setResult",
+          "content provider access"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 2,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 17,
+          "score": 0.1,
+          "finding": {
+            "type": "insecure intent",
+            "location": "smali/com/insecureshop/R$layout.smali:78",
+            "severity": "low",
+            "evidence": "Resource named activity_implicit_intent_for_non_exported was detected, which suggests an attempt to handle implicit intents for a non-exported activity.",
+            "confidence": 0.6
+          }
+        },
+        {
+          "finding_index": 18,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure WebView URL Handling",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:434-456",
+            "severity": "medium",
+            "evidence": "The WebView loads a URL obtained from the Intent extras via Bundle.getString and passes it to WebView.loadUrl without validating the URL or scheme.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V15",
+        "title": "Insecure content provider",
+        "aliases": [
+          "content provider",
+          "credential theft"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 19,
+          "score": 0.7,
+          "finding": {
+            "type": "Credential Exposure via Content Provider",
+            "location": "smali/com/insecureshop/contentProvider/InsecureshopFileProvider.smali:166-296",
+            "severity": "high",
+            "evidence": "The query method returns a MatrixCursor containing username and password columns populated from Prefs, allowing the matching URI to return stored credentials without access control.",
+            "confidence": 0.95
+          }
+        },
+        {
+          "finding_index": 23,
+          "score": 0.2,
+          "finding": {
+            "type": "Insecure Storage",
+            "location": "smali/com/insecureshop/ChooserActivity.smali:30-47",
+            "severity": "medium",
+            "evidence": "The makeTempCopy method copies an incoming content URI to Environment.getExternalStorageDirectory()/insecureshop using File and ContentResolver, rather than using app-specific storage or properly permissioned storage. The code creates the destination file and performs the copy without visible cleanup or permission handling.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 2,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V16",
+        "title": "Missing SSL certificate validation",
+        "aliases": [
+          "SSL error",
+          "certificate validation",
+          "onReceivedSslError"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 6,
+          "score": 0.1,
+          "finding": {
+            "type": "Unvalidated WebView URL",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "medium",
+            "evidence": "The WebView loads URLs from intent data, query parameters, or extras without validation.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 9,
+          "score": 0.1,
+          "finding": {
+            "type": "WebView navigation lacks URL validation",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "medium",
+            "evidence": "The code reads a URL from intent data or query parameters and calls WebView.loadUrl without a robust allowlist or scheme/host validation before loading.",
+            "confidence": 0.75
+          }
+        },
+        {
+          "finding_index": 11,
+          "score": 0.1,
+          "finding": {
+            "type": "missing_broadcast_export_flag",
+            "location": "smali/com/insecureshop/ProductListActivity.smali:30-31",
+            "severity": "medium",
+            "evidence": "The code registers a BroadcastReceiver with an IntentFilter for com.insecureshop.action.PRODUCT_DETAIL using the two-argument registerReceiver form without specifying RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED.",
+            "confidence": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V17",
+        "title": "Insecure WebView settings",
+        "aliases": [
+          "WebView",
+          "javascript enabled",
+          "file access"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 5,
+          "score": 1.0,
+          "finding": {
+            "type": "WebView JavaScript Enabled",
+            "location": "smali/com/insecureshop/WebView2Activity.smali:208-433",
+            "severity": "medium",
+            "evidence": "WebSettings.setJavaScriptEnabled(true) is called, enabling JavaScript in the WebView.",
+            "confidence": 0.8
+          }
+        },
+        {
+          "finding_index": 8,
+          "score": 1.0,
+          "finding": {
+            "type": "WebView file access enabled",
+            "location": "smali/com/insecureshop/WebViewActivity.smali:203-411",
+            "severity": "high",
+            "evidence": "The WebView setup calls WebSettings.setAllowUniversalAccessFromFileURLs, a sensitive file-access setting that can permit web content to access file:// resources when enabled.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 26,
+          "score": 1.0,
+          "finding": {
+            "type": "WebView JavaScript Enabled",
+            "location": "smali/com/insecureshop/PrivateActivity.smali:24-25",
+            "severity": "medium",
+            "evidence": "The decompiled PrivateActivity code explicitly enables JavaScript on the WebView via setJavaScriptEnabled(true) and configures load behavior via setLoadWithOverviewMode(true), without any compensating controls shown for untrusted WebView content.",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V18",
+        "title": "Insecure local data storage",
+        "aliases": [
+          "insecure storage",
+          "unencrypted storage",
+          "shared preferences"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 23,
+          "score": 0.7,
+          "finding": {
+            "type": "Insecure Storage",
+            "location": "smali/com/insecureshop/ChooserActivity.smali:30-47",
+            "severity": "medium",
+            "evidence": "The makeTempCopy method copies an incoming content URI to Environment.getExternalStorageDirectory()/insecureshop using File and ContentResolver, rather than using app-specific storage or properly permissioned storage. The code creates the destination file and performs the copy without visible cleanup or permission handling.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 2,
+          "score": 0.2,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 22,
+          "score": 0.2,
+          "finding": {
+            "type": "plaintext sensitive data storage",
+            "location": "smali/com/insecureshop/util/Prefs.smali:12-47",
+            "severity": "high",
+            "evidence": "The Prefs class uses a plain SharedPreferences instance and stores or retrieves sensitive values such as data, password, and username through it, without any encryption or Keystore-backed storage mechanism observed.",
+            "confidence": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "ground_truth": {
+        "id": "V19",
+        "title": "Insecure logging of credentials",
+        "aliases": [
+          "logcat",
+          "insecure logging",
+          "credential logging"
+        ]
+      },
+      "candidates": [
+        {
+          "finding_index": 12,
+          "score": 0.7,
+          "finding": {
+            "type": "sensitive-data-logging",
+            "location": "smali/com/insecureshop/LoginActivity.smali:39-40",
+            "severity": "medium",
+            "evidence": "The code calls Log.d with the username and password strings, which may write credentials to logcat.",
+            "confidence": 0.95
+          }
+        },
+        {
+          "finding_index": 2,
+          "score": 0.1,
+          "finding": {
+            "type": "Insecure Backup",
+            "location": "AndroidManifest.xml:1-59",
+            "severity": "medium",
+            "evidence": "The application element sets android:allowBackup to true, which may back up sensitive app data.",
+            "confidence": 0.85
+          }
+        },
+        {
+          "finding_index": 17,
+          "score": 0.1,
+          "finding": {
+            "type": "insecure intent",
+            "location": "smali/com/insecureshop/R$layout.smali:78",
+            "severity": "low",
+            "evidence": "Resource named activity_implicit_intent_for_non_exported was detected, which suggests an attempt to handle implicit intents for a non-exported activity.",
+            "confidence": 0.6
+          }
+        }
+      ]
+    }
+  ],
+  "note": "Recall is final only after reviewing candidate matches. A finding may be confirmed against at most one ground-truth entry."
+}
