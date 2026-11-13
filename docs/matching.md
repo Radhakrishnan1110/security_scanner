@@ -13,3 +13,5 @@ confirmed known vulnerabilities / 19
 ```
 
 This keeps the result honest. LLMs often use different names for the same issue, but they can also describe related issues that should not be counted as a match. The JSON confirmation files record the final reviewed matches, so the reported recall can be checked later.
+
+There is an important limit: this is one app and one benchmark. A better recall score after the lessons is encouraging, but it does not prove that the lessons will improve scans of other apps. To test that properly, I would keep other APKs out of lesson writing and use them later as held-out test apps.

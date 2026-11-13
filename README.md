@@ -12,6 +12,11 @@ This project is a small, reusable APK security-scanning harness built around the
 - Tests for scan-output validation and recall calculation.
 - A proposed dynamic-analysis architecture in `docs/dynamic_analysis.md`.
 
+
+## Submission notes
+
+[Open the Google Doc](https://docs.google.com/document/d/1ShnBIKyQA61HCCkmiXX-T7arVcmEnVj6KDV1CFMhJdQ/edit?usp=sharing)
+
 ## Scan results
 
 The baseline and guided scans used the same student model (`recursive/flint-v1.0:free`) and the same scan budget of 60 source chunks. This keeps the comparison fair.
