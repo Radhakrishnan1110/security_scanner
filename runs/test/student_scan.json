@@ -1,0 +1,403 @@
+{
+  "role": "student",
+  "model": "recursive/flint-v1.0:free",
+  "lessons_applied": [],
+  "chunks_scanned": 60,
+  "requests": 20,
+  "findings": [
+    {
+      "type": "cleartext traffic enabled",
+      "location": "AndroidManifest.xml:1-68",
+      "severity": "high",
+      "evidence": "The application declares android:usesCleartextTraffic=\"true\" and includes intent filters accepting http and https media/video schemes, allowing unencrypted network traffic.",
+      "confidence": 0.9
+    },
+    {
+      "type": "backup allowed",
+      "location": "AndroidManifest.xml:1-68",
+      "severity": "medium",
+      "evidence": "The application sets android:allowBackup=\"true\", which may expose sensitive data through backups.",
+      "confidence": 0.8
+    },
+    {
+      "type": "broad package query",
+      "location": "AndroidManifest.xml:1-68",
+      "severity": "medium",
+      "evidence": "The manifest declares android.permission.QUERY_ALL_PACKAGES, enabling broad package visibility and query behavior.",
+      "confidence": 0.8
+    },
+    {
+      "type": "system alert window permission",
+      "location": "AndroidManifest.xml:1-68",
+      "severity": "medium",
+      "evidence": "The manifest declares android.permission.SYSTEM_ALERT_WINDOW, which can allow overlay windows and associated UI control risks.",
+      "confidence": 0.8
+    },
+    {
+      "type": "Overly Broad Deep Link Configuration",
+      "location": "AndroidManifest.xml:69-126",
+      "severity": "medium",
+      "evidence": "The intent-filter declares android:autoVerify=\"true\" while accepting http and https schemes with android:host=\"*\" and multiple broad pathPattern values for media file extensions, which may permit unverified or unintended external deep links.",
+      "confidence": 0.85
+    },
+    {
+      "type": "Overly permissive deep link path pattern",
+      "location": "AndroidManifest.xml:212-343",
+      "severity": "medium",
+      "evidence": "The manifest contains multiple <data android:pathPattern=\"...\"/> elements for media-related file extensions such as .M3U8, .m4v, .mkv, .mov, .M4V, and .MKV. Many patterns use broad leading and trailing wildcards and repeated \\..* segments, which may result in overly permissive URI matching for deep links or file access.",
+      "confidence": 0.75
+    },
+    {
+      "type": "Insecure Media Intent Filter Configuration",
+      "location": "AndroidManifest.xml:344-479",
+      "severity": "medium",
+      "evidence": "The manifest repeatedly declares multiple <data android:pathPattern=\"...\"/> entries covering media file extensions such as .mov, .MOV, .mp4, .MP4, and .mpd, using broad wildcard patterns and many case/path variants. This may allow unintended external app access or improper handling of media file URIs.",
+      "confidence": 0.75
+    },
+    {
+      "type": "insecure WebView configuration",
+      "location": "smali/app/cricfy/tv/activities/WebActivity.smali:306-575",
+      "severity": "high",
+      "evidence": "The supplied WebActivity code enables WebView JavaScript, JavaScript window opening, DOM storage, content access, and file access, which can permit script execution and file access from loaded content.",
+      "confidence": 0.9
+    },
+    {
+      "type": "overly permissive intent filter",
+      "location": "AndroidManifest.xml:613-654",
+      "severity": "low",
+      "evidence": "Multiple data android:pathPattern entries contain broad regular expressions with repeated wildcard segments and case-insensitive .WEBM patterns, potentially allowing unintended file URI handling.",
+      "confidence": 0.6
+    },
+    {
+      "type": "unvalidated external intent URI",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:6571-6836",
+      "severity": "medium",
+      "evidence": "The PlayerActivity code reads an external ad URL from SharedPreferences, parses it into a Uri, and launches a Chrome intent without validating the URI scheme or destination.",
+      "confidence": 0.8
+    },
+    {
+      "type": "Unvalidated WebView URL",
+      "location": "smali/app/cricfy/tv/activities/WebActivity.smali:576-777",
+      "severity": "medium",
+      "evidence": "The WebView loads a URL from the Intent 'url' extra via WebView.loadUrl after only an Objects.requireNonNull check, with no visible scheme or host validation or WebViewClient.",
+      "confidence": 0.85
+    },
+    {
+      "type": "Unvalidated Deep Link URL",
+      "location": "smali/app/cricfy/tv/firebase/PushService.smali:331-623",
+      "severity": "medium",
+      "evidence": "The openUrl branch reads a URL from a map, parses it with Uri.parse, and starts an ACTION_VIEW intent without validating the URI before startActivity.",
+      "confidence": 0.85
+    },
+    {
+      "type": "Improper Intent Handling",
+      "location": "smali/app/cricfy/tv/activities/SupportActivity.smali:860-1169",
+      "severity": "low",
+      "evidence": "SupportActivity.y creates an ACTION_VIEW intent with data from a String parameter via Uri.parse and starts the activity without explicit package or URI validation.",
+      "confidence": 0.65
+    },
+    {
+      "type": "Insecure Deep Link Handling",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:383-434",
+      "severity": "medium",
+      "evidence": "The code reads Intent extras such as title, isEncoded, links, and position via getStringExtra and getBooleanExtra and passes or stores the links string into ProApplication.E and invokes playback handling. No validation or sanitization is visible before use.",
+      "confidence": 0.72
+    },
+    {
+      "type": "Insecure JSON Input Handling",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:71-89",
+      "severity": "medium",
+      "evidence": "The code parses a JSON array from an input string and accesses keys such as playlist, w, x, y, z, A, and B without visible validation of the JSON structure or source. The values are then assigned to activity fields and used for playback.",
+      "confidence": 0.68
+    },
+    {
+      "type": "cleartext traffic",
+      "location": "smali/app/cricfy/tv/activities/MainActivity.smali:610-616",
+      "severity": "medium",
+      "evidence": "The ad URL is checked with String.startsWith(\"http\") and the code proceeds when true, without enforcing an https scheme or validating the URL scheme.",
+      "confidence": 0.9
+    },
+    {
+      "type": "hardcoded fallback playback URL",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:5707-5983",
+      "severity": "low",
+      "evidence": "When the 'links_model' Intent extra is absent or its parcelable value is null, the code assigns the hardcoded string 'https://pro.com' to the player host field before starting playback.",
+      "confidence": 0.85
+    },
+    {
+      "type": "insecure_storage",
+      "location": "smali/app/cricfy/tv/activities/SplashActivity.smali:180-194",
+      "severity": "low",
+      "evidence": "The code writes the is_tv boolean to SharedPreferences via Editor.putBoolean and applies the changes without encryption.",
+      "confidence": 0.8
+    },
+    {
+      "type": "improper_permission_handling",
+      "location": "smali/app/cricfy/tv/activities/SplashActivity.smali:289-314",
+      "severity": "medium",
+      "evidence": "The code checks the POST_NOTIFICATIONS permission and conditionally invokes a permission handler, but the provided logic does not clearly show a valid request flow or permanent-denial handling.",
+      "confidence": 0.6
+    },
+    {
+      "type": "hardcoded backend endpoint",
+      "location": "smali/app/cricfy/tv/activities/SplashActivity.smali:1541-1643",
+      "severity": "low",
+      "evidence": "The code hardcodes a default backup host value (`https://error_pro.com`) and reads it from `SharedPreferences` under the `backup_host` key.",
+      "confidence": 0.9
+    },
+    {
+      "type": "handler leak",
+      "location": "smali/app/cricfy/tv/activities/SplashActivity.smali:1218-1540",
+      "severity": "low",
+      "evidence": "A `Handler` is created and `postDelayed` is called with a `Runnable` that holds the activity context, without removing callbacks.",
+      "confidence": 0.8
+    },
+    {
+      "type": "Insecure URL Validation",
+      "location": "smali/app/cricfy/tv/activities/TvActivity.smali:440-470",
+      "severity": "medium",
+      "evidence": "The code checks the string with startsWith(\"http\") and then puts the unvalidated value into a fragment argument via Bundle.putString, without validating the URL scheme, origin, or allowed destinations.",
+      "confidence": 0.7
+    },
+    {
+      "type": "Unvalidated Deep Link",
+      "location": "smali/app/cricfy/tv/firebase/PushService.smali:118-136",
+      "severity": "medium",
+      "evidence": "The Firebase push payload is read and the path/links values are passed into an Intent extra for PlayerActivity without validation, allowing unverified remote data to influence app navigation or content.",
+      "confidence": 0.6
+    },
+    {
+      "type": "missing foreground service type",
+      "location": "smali/app/cricfy/tv/services/FloatingPlayer.smali:322-640",
+      "severity": "medium",
+      "evidence": "The code calls the deprecated Service.startForeground(int, Notification) overload and branches only on Build.VERSION.SDK_INT >= 26, rather than using the API 34+ overload that requires a foreground service type.",
+      "confidence": 0.85
+    },
+    {
+      "type": "Improper Runtime Permission Handling",
+      "location": "smali/app/cricfy/tv/activities/MainActivity.smali:165-185",
+      "severity": "medium",
+      "evidence": "The code checks android.permission.POST_NOTIFICATIONS and conditionally calls shouldShowRequestPermissionRationale, but the control flow appears inconsistent with expected permission state handling and no explicit permission request flow is visible in the excerpt.",
+      "confidence": 0.75
+    },
+    {
+      "type": "Obfuscated Permission Verification",
+      "location": "smali/app/cricfy/tv/activities/MainActivity.smali:550-568",
+      "severity": "low",
+      "evidence": "The code decodes a Base64 string and compares it to PackageInfo.requestedPermissions before invoking a method, using obfuscated values that may obscure permission checks or introduce brittle security logic.",
+      "confidence": 0.6
+    },
+    {
+      "type": "Unvalidated URL construction",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:630-648",
+      "severity": "medium",
+      "evidence": "The catch block builds a URL by concatenating the hardcoded prefix 'https://' with Throwable.getMessage() and passes it to Lv1/j0.b, which likely constructs a URI without sanitization.",
+      "confidence": 0.7
+    },
+    {
+      "type": "Context leak via delayed runnable",
+      "location": "smali/app/cricfy/tv/activities/MainActivity.smali:197-214",
+      "severity": "low",
+      "evidence": "A Handler posts a delayed Lr5/f Runnable that holds a reference to the MainActivity instance, which may cause context retention if the activity is finishing.",
+      "confidence": 0.6
+    },
+    {
+      "type": "memory leak",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:2205-2470",
+      "severity": "low",
+      "evidence": "Creates an Android Handler with postDelayed to an internal Runnable that holds PlayerActivity, without visible lifecycle callback removal.",
+      "confidence": 0.7
+    },
+    {
+      "type": "Improper Intent Handling",
+      "location": "smali/app/cricfy/tv/activities/PlayerActivity.smali:4500-4805",
+      "severity": "medium",
+      "evidence": "The onNewIntent method calls y(Landroid/content/Intent;)V directly, the same intent handling routine used during the activity lifecycle, without an explicit guard against duplicate or already-active playback handling.",
+      "confidence": 0.6
+    }
+  ],
+  "raw_responses": [
+    {
+      "batch": 1,
+      "chunk_ids": [
+        "AndroidManifest.xml:699:735:0ded65c6dfa4",
+        "AndroidManifest.xml:655:698:4ea6c42134f4",
+        "AndroidManifest.xml:1:68:c86c444f6bd6"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"cleartext traffic enabled\",\n      \"location\": \"AndroidManifest.xml:1-68\",\n      \"severity\": \"high\",\n      \"evidence\": \"The application declares android:usesCleartextTraffic=\\\"true\\\" and includes intent filters accepting http and https media/video schemes, allowing unencrypted network traffic.\",\n      \"confidence\": 0.9\n    },\n    {\n      \"type\": \"backup allowed\",\n      \"location\": \"AndroidManifest.xml:1-68\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The application sets android:allowBackup=\\\"true\\\", which may expose sensitive data through backups.\",\n      \"confidence\": 0.8\n    },\n    {\n      \"type\": \"broad package query\",\n      \"location\": \"AndroidManifest.xml:1-68\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The manifest declares android.permission.QUERY_ALL_PACKAGES, enabling broad package visibility and query behavior.\",\n      \"confidence\": 0.8\n    },\n    {\n      \"type\": \"system alert window permission\",\n      \"location\": \"AndroidManifest.xml:1-68\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The manifest declares android.permission.SYSTEM_ALERT_WINDOW, which can allow overlay windows and associated UI control risks.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 2,
+      "chunk_ids": [
+        "AndroidManifest.xml:69:126:a02d8a839ffe",
+        "AndroidManifest.xml:127:170:072107778735",
+        "AndroidManifest.xml:171:211:ec057dc52fcb"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Overly Broad Deep Link Configuration\",\n      \"location\": \"AndroidManifest.xml:69-126\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The intent-filter declares android:autoVerify=\\\"true\\\" while accepting http and https schemes with android:host=\\\"*\\\" and multiple broad pathPattern values for media file extensions, which may permit unverified or unintended external deep links.\",\n      \"confidence\": 0.85\n    }\n  ]\n}"
+    },
+    {
+      "batch": 3,
+      "chunk_ids": [
+        "AndroidManifest.xml:212:258:e7cbed83158e",
+        "AndroidManifest.xml:259:301:9826343d6d2a",
+        "AndroidManifest.xml:302:343:81d54a2de72a"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Overly permissive deep link path pattern\",\n      \"location\": \"AndroidManifest.xml:212-343\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The manifest contains multiple <data android:pathPattern=\\\"...\\\"/> elements for media-related file extensions such as .M3U8, .m4v, .mkv, .mov, .M4V, and .MKV. Many patterns use broad leading and trailing wildcards and repeated \\\\..* segments, which may result in overly permissive URI matching for deep links or file access.\",\n      \"confidence\": 0.75\n    }\n  ]\n}"
+    },
+    {
+      "batch": 4,
+      "chunk_ids": [
+        "AndroidManifest.xml:344:391:317ed3bc730b",
+        "AndroidManifest.xml:392:433:c1b5fac9c7d7",
+        "AndroidManifest.xml:434:479:62a5fdb3a7cb"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure Media Intent Filter Configuration\",\n      \"location\": \"AndroidManifest.xml:344-479\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The manifest repeatedly declares multiple <data android:pathPattern=\\\"...\\\"/> entries covering media file extensions such as .mov, .MOV, .mp4, .MP4, and .mpd, using broad wildcard patterns and many case/path variants. This may allow unintended external app access or improper handling of media file URIs.\",\n      \"confidence\": 0.75\n    }\n  ]\n}"
+    },
+    {
+      "batch": 5,
+      "chunk_ids": [
+        "AndroidManifest.xml:480:523:4c105fbff25e",
+        "AndroidManifest.xml:524:564:ed499ae514a2",
+        "AndroidManifest.xml:565:612:d5b80e5755fa"
+      ],
+      "response": null,
+      "parse_error": "expected string or bytes-like object, got 'NoneType'"
+    },
+    {
+      "batch": 6,
+      "chunk_ids": [
+        "AndroidManifest.xml:613:654:da97b00f4bc7",
+        "smali/app/cricfy/tv/activities/WebActivity.smali:306:575:a969b470de29",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:6571:6836:1c04f8293d0e"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"insecure WebView configuration\",\n      \"location\": \"smali/app/cricfy/tv/activities/WebActivity.smali:306-575\",\n      \"severity\": \"high\",\n      \"evidence\": \"The supplied WebActivity code enables WebView JavaScript, JavaScript window opening, DOM storage, content access, and file access, which can permit script execution and file access from loaded content.\",\n      \"confidence\": 0.9\n    },\n    {\n      \"type\": \"overly permissive intent filter\",\n      \"location\": \"AndroidManifest.xml:613-654\",\n      \"severity\": \"low\",\n      \"evidence\": \"Multiple data android:pathPattern entries contain broad regular expressions with repeated wildcard segments and case-insensitive .WEBM patterns, potentially allowing unintended file URI handling.\",\n      \"confidence\": 0.6\n    },\n    {\n      \"type\": \"unvalidated external intent URI\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:6571-6836\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The PlayerActivity code reads an external ad URL from SharedPreferences, parses it into a Uri, and launches a Chrome intent without validating the URI scheme or destination.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 7,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/SupportActivity.smali:860:1169:28b9c869f4fa",
+        "smali/app/cricfy/tv/activities/WebActivity.smali:576:777:af31f1aa09c2",
+        "smali/app/cricfy/tv/firebase/PushService.smali:331:623:8dc01dea8a8e"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Unvalidated WebView URL\",\n      \"location\": \"smali/app/cricfy/tv/activities/WebActivity.smali:576-777\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The WebView loads a URL from the Intent 'url' extra via WebView.loadUrl after only an Objects.requireNonNull check, with no visible scheme or host validation or WebViewClient.\",\n      \"confidence\": 0.85\n    },\n    {\n      \"type\": \"Unvalidated Deep Link URL\",\n      \"location\": \"smali/app/cricfy/tv/firebase/PushService.smali:331-623\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The openUrl branch reads a URL from a map, parses it with Uri.parse, and starts an ACTION_VIEW intent without validating the URI before startActivity.\",\n      \"confidence\": 0.85\n    },\n    {\n      \"type\": \"Improper Intent Handling\",\n      \"location\": \"smali/app/cricfy/tv/activities/SupportActivity.smali:860-1169\",\n      \"severity\": \"low\",\n      \"evidence\": \"SupportActivity.y creates an ACTION_VIEW intent with data from a String parameter via Uri.parse and starts the activity without explicit package or URI validation.\",\n      \"confidence\": 0.65\n    }\n  ]\n}"
+    },
+    {
+      "batch": 8,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/MainActivity.smali:1783:2103:d2c5d4b3bf90",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:1902:2204:2dcc0f328668",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:6296:6570:e1db0fd361ad"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure Deep Link Handling\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:383-434\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code reads Intent extras such as title, isEncoded, links, and position via getStringExtra and getBooleanExtra and passes or stores the links string into ProApplication.E and invokes playback handling. No validation or sanitization is visible before use.\",\n      \"confidence\": 0.72\n    },\n    {\n      \"type\": \"Insecure JSON Input Handling\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:71-89\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code parses a JSON array from an input string and accesses keys such as playlist, w, x, y, z, A, and B without visible validation of the JSON structure or source. The values are then assigned to activity fields and used for playback.\",\n      \"confidence\": 0.68\n    }\n  ]\n}"
+    },
+    {
+      "batch": 9,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/SupportActivity.smali:1468:1701:bdb617aef886",
+        "smali/app/cricfy/tv/firebase/PushService.smali:624:913:eeda4b41f48f",
+        "smali/app/cricfy/tv/activities/MainActivity.smali:2412:2712:c0af29fc34b4"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"cleartext traffic\",\n      \"location\": \"smali/app/cricfy/tv/activities/MainActivity.smali:610-616\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The ad URL is checked with String.startsWith(\\\"http\\\") and the code proceeds when true, without enforcing an https scheme or validating the URL scheme.\",\n      \"confidence\": 0.9\n    }\n  ]\n}"
+    },
+    {
+      "batch": 10,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:651:980:0099cbbdde95",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:4806:5111:3af68c72f32d",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:5112:5404:fd67196ea077"
+      ],
+      "response": null,
+      "parse_error": "expected string or bytes-like object, got 'NoneType'"
+    },
+    {
+      "batch": 11,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:5405:5706:59faa83cfa39",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:5707:5983:937d422ba7d6",
+        "smali/app/cricfy/tv/activities/SplashActivity.smali:1:330:92f3e3d2ee78"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"hardcoded fallback playback URL\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:5707-5983\",\n      \"severity\": \"low\",\n      \"evidence\": \"When the 'links_model' Intent extra is absent or its parcelable value is null, the code assigns the hardcoded string 'https://pro.com' to the player host field before starting playback.\",\n      \"confidence\": 0.85\n    }\n  ]\n}"
+    },
+    {
+      "batch": 12,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/SplashActivity.smali:331:644:739f2971491f",
+        "smali/app/cricfy/tv/activities/SplashActivity.smali:645:934:4141b8fd5ed2",
+        "smali/app/cricfy/tv/activities/SplashActivity.smali:935:1217:b3461f730a3d"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"insecure_storage\",\n      \"location\": \"smali/app/cricfy/tv/activities/SplashActivity.smali:180-194\",\n      \"severity\": \"low\",\n      \"evidence\": \"The code writes the is_tv boolean to SharedPreferences via Editor.putBoolean and applies the changes without encryption.\",\n      \"confidence\": 0.8\n    },\n    {\n      \"type\": \"improper_permission_handling\",\n      \"location\": \"smali/app/cricfy/tv/activities/SplashActivity.smali:289-314\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code checks the POST_NOTIFICATIONS permission and conditionally invokes a permission handler, but the provided logic does not clearly show a valid request flow or permanent-denial handling.\",\n      \"confidence\": 0.6\n    }\n  ]\n}"
+    },
+    {
+      "batch": 13,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/SplashActivity.smali:1218:1540:0977264b7fab",
+        "smali/app/cricfy/tv/activities/SplashActivity.smali:1541:1643:4d29ee0595ad",
+        "smali/app/cricfy/tv/activities/SupportActivity.smali:335:594:16c2d067b076"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"hardcoded backend endpoint\",\n      \"location\": \"smali/app/cricfy/tv/activities/SplashActivity.smali:1541-1643\",\n      \"severity\": \"low\",\n      \"evidence\": \"The code hardcodes a default backup host value (`https://error_pro.com`) and reads it from `SharedPreferences` under the `backup_host` key.\",\n      \"confidence\": 0.9\n    },\n    {\n      \"type\": \"handler leak\",\n      \"location\": \"smali/app/cricfy/tv/activities/SplashActivity.smali:1218-1540\",\n      \"severity\": \"low\",\n      \"evidence\": \"A `Handler` is created and `postDelayed` is called with a `Runnable` that holds the activity context, without removing callbacks.\",\n      \"confidence\": 0.8\n    }\n  ]\n}"
+    },
+    {
+      "batch": 14,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/TvActivity.smali:905:1195:298e5fdadee4",
+        "smali/app/cricfy/tv/activities/WebActivity.smali:1:305:8d7ec8125460",
+        "smali/app/cricfy/tv/firebase/PushService.smali:1:330:f75619599bb2"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Insecure URL Validation\",\n      \"location\": \"smali/app/cricfy/tv/activities/TvActivity.smali:440-470\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code checks the string with startsWith(\\\"http\\\") and then puts the unvalidated value into a fragment argument via Bundle.putString, without validating the URL scheme, origin, or allowed destinations.\",\n      \"confidence\": 0.7\n    },\n    {\n      \"type\": \"Unvalidated Deep Link\",\n      \"location\": \"smali/app/cricfy/tv/firebase/PushService.smali:118-136\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The Firebase push payload is read and the path/links values are passed into an Intent extra for PlayerActivity without validation, allowing unverified remote data to influence app navigation or content.\",\n      \"confidence\": 0.6\n    }\n  ]\n}"
+    },
+    {
+      "batch": 15,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/services/FloatingPlayer.smali:322:640:4e1ccbbefa8e",
+        "smali/app/cricfy/tv/services/FloatingPlayer.smali:641:940:66174eafdfea",
+        "smali/app/cricfy/tv/activities/LandscapeActivity.smali:1:285:0b429615f683"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"missing foreground service type\",\n      \"location\": \"smali/app/cricfy/tv/services/FloatingPlayer.smali:322-640\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code calls the deprecated Service.startForeground(int, Notification) overload and branches only on Build.VERSION.SDK_INT >= 26, rather than using the API 34+ overload that requires a foreground service type.\",\n      \"confidence\": 0.85\n    }\n  ]\n}"
+    },
+    {
+      "batch": 16,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/MainActivity.smali:1506:1782:387a885caed9",
+        "smali/app/cricfy/tv/activities/MainActivity.smali:2104:2411:f5bcd38fcc53",
+        "smali/app/cricfy/tv/activities/MainActivity.smali:3000:3296:86b22d1ef865"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Improper Runtime Permission Handling\",\n      \"location\": \"smali/app/cricfy/tv/activities/MainActivity.smali:165-185\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The code checks android.permission.POST_NOTIFICATIONS and conditionally calls shouldShowRequestPermissionRationale, but the control flow appears inconsistent with expected permission state handling and no explicit permission request flow is visible in the excerpt.\",\n      \"confidence\": 0.75\n    },\n    {\n      \"type\": \"Obfuscated Permission Verification\",\n      \"location\": \"smali/app/cricfy/tv/activities/MainActivity.smali:550-568\",\n      \"severity\": \"low\",\n      \"evidence\": \"The code decodes a Base64 string and compares it to PackageInfo.requestedPermissions before invoking a method, using obfuscated values that may obscure permission checks or introduce brittle security logic.\",\n      \"confidence\": 0.6\n    }\n  ]\n}"
+    },
+    {
+      "batch": 17,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/MainActivity.smali:3297:3583:e1d6be5f2835",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:349:650:3683c80f92e8",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:1315:1623:89d8966ec062"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Unvalidated URL construction\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:630-648\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The catch block builds a URL by concatenating the hardcoded prefix 'https://' with Throwable.getMessage() and passes it to Lv1/j0.b, which likely constructs a URI without sanitization.\",\n      \"confidence\": 0.7\n    },\n    {\n      \"type\": \"Context leak via delayed runnable\",\n      \"location\": \"smali/app/cricfy/tv/activities/MainActivity.smali:197-214\",\n      \"severity\": \"low\",\n      \"evidence\": \"A Handler posts a delayed Lr5/f Runnable that holds a reference to the MainActivity instance, which may cause context retention if the activity is finishing.\",\n      \"confidence\": 0.6\n    }\n  ]\n}"
+    },
+    {
+      "batch": 18,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:2205:2470:5c5d2f623514",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:3702:3985:417c6b1d056d",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:3986:4233:d80b622abed6"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"memory leak\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:2205-2470\",\n      \"severity\": \"low\",\n      \"evidence\": \"Creates an Android Handler with postDelayed to an internal Runnable that holds PlayerActivity, without visible lifecycle callback removal.\",\n      \"confidence\": 0.7\n    }\n  ]\n}"
+    },
+    {
+      "batch": 19,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:4234:4499:e4e3ce34dbc6",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:4500:4805:4c8d89485657",
+        "smali/app/cricfy/tv/activities/PlayerActivity.smali:6837:7176:9067891e70cd"
+      ],
+      "response": "{\n  \"findings\": [\n    {\n      \"type\": \"Improper Intent Handling\",\n      \"location\": \"smali/app/cricfy/tv/activities/PlayerActivity.smali:4500-4805\",\n      \"severity\": \"medium\",\n      \"evidence\": \"The onNewIntent method calls y(Landroid/content/Intent;)V directly, the same intent handling routine used during the activity lifecycle, without an explicit guard against duplicate or already-active playback handling.\",\n      \"confidence\": 0.6\n    }\n  ]\n}"
+    },
+    {
+      "batch": 20,
+      "chunk_ids": [
+        "smali/app/cricfy/tv/activities/SupportActivity.smali:595:859:1f62dda01ffc",
+        "smali/app/cricfy/tv/activities/SupportActivity.smali:1170:1467:63852f6110c4",
+        "smali/app/cricfy/tv/activities/TvActivity.smali:339:636:e23342dc62bc"
+      ],
+      "response": "{\n  \"findings\": []\n}"
+    }
+  ]
+}

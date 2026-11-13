@@ -37,3 +37,11 @@ I kept the student model fixed for both the baseline and guided scans. This mean
 ## Question: What was the open model's recall before and after the lessons?
 
 The confirmed baseline recall was 10/19 (52.6%). The guided student recall was 11/19 (57.9%). The run used a 60-chunk scan budget because of free-tier request limits. The raw scan output, lesson file, and reviewed evaluation files are included in `runs/insecureshop/`.
+
+## Optional question: Did you run the frontier scan on a real APK? What was real, what was noise, and what broke?
+
+Yes. I ran the student scanner against the Cricfy v6.8 APK as a separate static-analysis check. It indexed 122 files into 564 chunks and scanned 60 chunks in 20 model requests. The model reported 30 findings.
+
+After reviewing the evidence, I counted 7 as supported security risks. These included cleartext traffic, risky WebView permissions, unvalidated URL handling from intents or push data, and external URL launches without a clear allowlist. Ten findings were plausible but needed more context, and 13 were noise for this review, such as handler or memory-leak warnings, foreground-service API compatibility, and non-sensitive preference storage. The binary summary is 7 supported findings and 23 findings not counted as confirmed security issues.
+
+Two model responses were malformed and skipped. The other limits were a 60-chunk free-tier budget, obfuscated Smali, and native libraries. These made the review incomplete and caused some generic Android quality warnings to appear as security findings. The full optional report is in `docs/frontier_scan.md`.

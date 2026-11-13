@@ -1,0 +1,7 @@
+{
+  "source_root": "D:\\Assignment\\security_scanner\\runs\\test\\decompiled",
+  "corpus": "D:\\Assignment\\security_scanner\\runs\\test\\corpus.jsonl",
+  "files": 122,
+  "chunks": 564,
+  "max_chunk_chars": 6000
+}
